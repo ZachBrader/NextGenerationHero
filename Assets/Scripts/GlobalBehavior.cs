@@ -8,10 +8,19 @@ public class GlobalBehavior : MonoBehaviour {
     public EggStatSystem mEggStat = null;
 
     public Text mGameStateEcho = null;  // Defined in UnityEngine.UI
+    public Text mEnemySequentialText = null;
+    public Text mWaypointVisibilityText = null;
+
+    public Text mEnemyDefeatedText = null;
+    private int mEnemiesDefeated = 0;
+    public Text mEnemyTouchedText = null;
+    private int mEnemiesTouched = 0;
 
     public GameObject enemy = null;
     public int totalNumEnemies;
     private int curNumEnemies;
+    private bool isSequential = true;
+    private bool isVisible = true;
 
     private Vector3 screenBounds;
 
@@ -43,11 +52,6 @@ public class GlobalBehavior : MonoBehaviour {
         mWorldBound = new Bounds(Vector3.zero, Vector3.one);
 		UpdateWorldWindowBound();
         #endregion
-
-        while (curNumEnemies < totalNumEnemies)
-        {
-            CreateEnemy();
-        }
     }
 
     /* Update is called once per frame 
@@ -167,10 +171,63 @@ public class GlobalBehavior : MonoBehaviour {
 
     #endregion
 
+    #region Enemy Functions
+
     public void CreateEnemy()
     {
+        // Create the new enemy and place it randomly
         GameObject newEnemy = Instantiate(enemy) as GameObject;
         newEnemy.transform.position = new Vector3(Random.Range(0f, screenBounds.x), Random.Range(0f, screenBounds.y), 0f);
-        Debug.Log("Enemy defeated");
     }
+
+    public void UpdateEnemyDefeatedState()
+    {
+        // Update text
+        mEnemiesDefeated++;
+        mEnemyDefeatedText.text = "Enemies Defeated: " + mEnemiesDefeated;
+    }
+
+    public void UpdateEnemyTouchedState()
+    {
+        // Update text
+        mEnemiesTouched++;
+        mEnemyTouchedText.text = "Enemies Touched: " + mEnemiesTouched;
+    }
+
+    #endregion
+
+    #region Waypoint Functions
+
+    // Determines enemy flight patterns
+    public bool getSequentialStatus()
+    {
+        return isSequential;
+    }
+
+    // Toggles enemy flight pattern
+    public void toggleSequential()
+    {
+        isSequential = !isSequential;
+
+        // Update text
+        mEnemySequentialText.text = "Sequential (J): " + getSequentialStatus().ToString();
+    }
+
+    // Returns waypoint visibility status
+    public bool getWaypointVisibilityStatus()
+    {
+        return isVisible;
+    }
+
+
+    // Updates waypoint visibility status
+    public void toggleWaypointVisibility()
+    {
+        isVisible = !isVisible;
+
+        // Update text
+        mWaypointVisibilityText.text = "Waypoint Visibility (H): " + getWaypointVisibilityStatus().ToString();
+
+    }
+    #endregion
 }

@@ -5,23 +5,45 @@ using System.Collections;
 public class HeroBehavior : MonoBehaviour {
 
     public EggStatSystem mEggStat = null;
+
+    // Player Speeds
     public float mHeroSpeed = 20f;
     public float kHeroRotateSpeed = 90f/2f; // 90-degrees in 2 seconds
                                             // Use this for initialization
 
+    // Boolean to determine if object should follow player's mouse
     private bool followUserMouse;
 
-	void Start () {
+    // Reference to Game Manager
+    private GlobalBehavior globalBehavior;
+
+
+    void Start () {
+        // Initialize object to not follow mouse
         followUserMouse = false;
         Debug.Assert(mEggStat != null);
-	}
+        globalBehavior = GameObject.Find("GameManager").GetComponent<GlobalBehavior>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.M))
+
+        // Have mouse follow the user if 'M' button pressed
+        if (Input.GetKeyUp(KeyCode.M))
         {
-            Debug.Log("Following user mouse...");
             followUserMouse = true;
+        }
+
+        // Toggle flights if 'J' button pressed
+        if (Input.GetKeyUp(KeyCode.J))
+        {
+            globalBehavior.toggleSequential();
+        }
+
+        //Toggle waypoint visibility if 'H' button pressed
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            globalBehavior.toggleWaypointVisibility();
         }
 
         UpdateMotion();
@@ -31,12 +53,11 @@ public class HeroBehavior : MonoBehaviour {
 
     private void UpdateMotion()
     {
+        // Determine how mouse should move
         if (!followUserMouse)
         {
             mHeroSpeed += Input.GetAxis("Vertical");
             transform.position += transform.up * (mHeroSpeed * Time.smoothDeltaTime);
-            transform.Rotate(Vector3.forward, -1f * Input.GetAxis("Horizontal") *
-                                        (kHeroRotateSpeed * Time.smoothDeltaTime));
         }
         else
         {
@@ -44,6 +65,10 @@ public class HeroBehavior : MonoBehaviour {
             mousePosition.z = 0;
             transform.position = mousePosition;
         }
+
+        // Handles player rotation
+        transform.Rotate(Vector3.forward, -1f * Input.GetAxis("Horizontal") *
+                                        (kHeroRotateSpeed * Time.smoothDeltaTime));
     }
 
     private void BoundPosition()

@@ -26,4 +26,13 @@ public class EggBehavior : MonoBehaviour
             GlobalBehavior.sTheGlobalBehavior.DestroyAnEgg();
         }
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        // Delete egg if it hits an enemy or waypoint
+        if (col.gameObject.tag == "Enemy" || col.gameObject.tag == "Waypoint")
+        {
+            Destroy(gameObject);
+        }
+    }
 }

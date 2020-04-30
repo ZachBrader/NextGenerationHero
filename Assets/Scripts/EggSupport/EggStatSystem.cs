@@ -73,7 +73,7 @@ public class EggStatSystem : MonoBehaviour
     #endregion
 
     // Count support
-    private void EchoEggCount() { GlobalBehavior.sTheGlobalBehavior.UpdateGameState("Egg Count: " + mEggCount); }
+    private void EchoEggCount() { GlobalBehavior.sTheGlobalBehavior.UpdateGameState("Egg Count (Space): " + mEggCount); }
     public void DecEggCount() { mEggCount--; EchoEggCount(); }
     private void IncEggCount() { mEggCount++; EchoEggCount(); }
 }
